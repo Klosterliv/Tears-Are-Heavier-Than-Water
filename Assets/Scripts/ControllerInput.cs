@@ -12,6 +12,7 @@ public class ControllerInput : MonoBehaviour {
 
 	[SerializeField] float shootCoolDown = 1;
 	[SerializeField] string shootInput = "ShootP1";
+	[SerializeField] float projectileForce = 10;
 
 	[SerializeField] bool speedRelative = false;
 	[SerializeField] bool maxSpeedOn = true;
@@ -29,6 +30,7 @@ public class ControllerInput : MonoBehaviour {
 	}
 
 	void Update () {
+		coolDown -= Time.deltaTime;
 		if (Input.GetButtonDown(shootInput) && coolDown <= 0f) {
 			fire = true;
 		}
@@ -98,5 +100,17 @@ public class ControllerInput : MonoBehaviour {
 		
 		GameObject fired;
 		fired = (GameObject) Instantiate(projectile, pos, Quaternion.identity);
+
+		Rigidbody2D projectileRigid; 
+		projectileRigid = fired.GetComponent<Rigidbody2D>();
+		Rigidbody2D shrimpRigid;
+		shrimpRigid = shrimp.GetComponent<Rigidbody2D>();
+
+		projectileRigid.velocity = (shrimpRigid.velocity+dir*projectileForce);
+
+
+
+		coolDown = shootCoolDown;
+		fire = false;
 	}
 }
