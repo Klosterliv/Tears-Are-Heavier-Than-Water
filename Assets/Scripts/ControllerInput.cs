@@ -5,6 +5,11 @@ public class ControllerInput : MonoBehaviour {
 
 	public GameObject hand;
 
+	[SerializeField] string horizontalAxisL;
+	[SerializeField] string horizontalAxisR;
+	[SerializeField] string verticalAxisL;
+	[SerializeField] string verticalAxisR;
+
 	public GameObject shrimp;
 
 	[SerializeField] float speed = 1;
@@ -48,8 +53,8 @@ public class ControllerInput : MonoBehaviour {
 	void Steer () {
 		Vector2 axisInput = new Vector2(0,0);
 
-		axisInput.x = Input.GetAxis("Horizontal");
-		axisInput.y = Input.GetAxis("Vertical");
+		axisInput.x = Input.GetAxis(horizontalAxisL);
+		axisInput.y = Input.GetAxis(verticalAxisL);
 
 		axisInput = Vector2.ClampMagnitude(axisInput,1f);
 
@@ -87,8 +92,8 @@ public class ControllerInput : MonoBehaviour {
 
 		Vector2 axisInput = new Vector2(0,0);
 
-		axisInput.x = Input.GetAxis("HorizontalRight");
-		axisInput.y = Input.GetAxis("VerticalRight");
+		axisInput.x = Input.GetAxis(horizontalAxisR);
+		axisInput.y = Input.GetAxis(verticalAxisR);
 
 		Debug.DrawRay(shrimp.transform.position, axisInput, Color.red, 1f);
 

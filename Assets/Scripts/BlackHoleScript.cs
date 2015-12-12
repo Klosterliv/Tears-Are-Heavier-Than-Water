@@ -11,7 +11,7 @@ public class BlackHoleScript : MonoBehaviour {
 	{
 		KillBlackhole(lifeTime);
 	}
-	void OnCollisionEnter(Collision2D _collider)
+	void OnCollisionEnter2D(Collision2D _collider)
 	{
 		if(_collider.gameObject.layer == 8)
 		{
