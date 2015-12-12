@@ -11,9 +11,9 @@ public class BlackHoleScript : MonoBehaviour {
 	{
 		KillBlackhole(lifeTime);
 	}
-	void OnTriggerEnter(Collision2D _collider)
+	void OnCollisionEnter(Collision2D _collider)
 	{
-		if(_collider.layer == "blackHole")
+		if(_collider.gameObject.layer == 8)
 		{
 			Debug.Log("Collided with Blackhole nr"+ _collider.gameObject.GetInstanceID());
 			Destroy(this.gameObject);
@@ -21,14 +21,14 @@ public class BlackHoleScript : MonoBehaviour {
 	}
 	void KillBlackhole(float _lifeTime)
 	{
-		if(lifeT<=0)
+		if(_lifeTime<=0)
 		{
 			Debug.Log(this.gameObject.GetInstanceID()+" ran out of time");
 			Destroy(this.gameObject);
 		}
 		else
 		{
-			_lifeTime = _lifeTime - 1*Time.fixedDeltaTime();
+			_lifeTime = _lifeTime - 1*Time.fixedDeltaTime;
 		}
 	}
 }
