@@ -10,17 +10,40 @@ public class ControllerInput : MonoBehaviour {
 	[SerializeField] float speed = 1;
 	[SerializeField] float maxSpeed = 10;
 
+	[SerializeField] float shootCoolDown = 1;
+	[SerializeField] string shootInput = "ShootP1";
+
 	[SerializeField] bool speedRelative = false;
 	[SerializeField] bool maxSpeedOn = true;
 
+	[SerializeField] GameObject projectile;
+
+
+	bool fire = false;
+	float coolDown;
+
 	// Use this for initialization
 	void Start () {
+		coolDown = shootCoolDown;
 	
+	}
+
+	void Update () {
+		if (Input.GetButtonDown(shootInput) && coolDown <= 0f) {
+			fire = true;
+		}
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
 
+		Steer ();
+		Aim ();
+
+	
+	}
+
+	void Steer () {
 		Vector2 axisInput = new Vector2(0,0);
 
 		axisInput.x = Input.GetAxis("Horizontal");
@@ -41,9 +64,9 @@ public class ControllerInput : MonoBehaviour {
 		} 
 
 		if(maxSpeedOn) {
-			float speedDot = Mathf.Clamp01(-Vector2.Dot(rigid.velocity, force));
+			float speedDot = Mathf.Clamp01(Vector2.Dot(rigid.velocity, force));         
 			float percentSpeed = rigid.velocity.magnitude / maxSpeed;
-			//force *= 
+			force -= force*( percentSpeed*speedDot ); 
 		}
 
 
@@ -55,6 +78,25 @@ public class ControllerInput : MonoBehaviour {
 
 		Debug.Log(""+force+"     "+dot);
 		Debug.DrawRay(shrimp.transform.position, force, Color.cyan, 0.01f);
-	
+
+	}
+
+	void Aim() {
+
+		Vector2 axisInput = new Vector2(0,0);
+
+		axisInput.x = Input.GetAxis("HorizontalRight");
+		axisInput.y = Input.GetAxis("VerticalRight");
+
+		Debug.DrawRay(shrimp.transform.position, axisInput, Color.red, 1f);
+
+		if(fire) Fire(shrimp.transform.position, axisInput);
+
+	}
+
+	void Fire(Vector2 pos, Vector2 dir) {
+		
+		GameObject fired;
+		fired = (GameObject) Instantiate(projectile, pos, Quaternion.identity);
 	}
 }
