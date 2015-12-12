@@ -5,20 +5,56 @@ public class ControllerInput : MonoBehaviour {
 
 	public GameObject hand;
 
+	public GameObject shrimp;
+
+	[SerializeField] float speed = 1;
+	[SerializeField] float maxSpeed = 10;
+
+	[SerializeField] bool speedRelative = false;
+	[SerializeField] bool maxSpeedOn = true;
+
 	// Use this for initialization
 	void Start () {
 	
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 
 		Vector2 axisInput = new Vector2(0,0);
 
 		axisInput.x = Input.GetAxis("Horizontal");
 		axisInput.y = Input.GetAxis("Vertical");
 
-		hand.transform.position += (Vector3) axisInput*Time.deltaTime;
+		axisInput = Vector2.ClampMagnitude(axisInput,1f);
+
+		float dot = Mathf.Clamp01(Vector2.Dot(axisInput, Vector2.up));
+
+		Vector2 force = axisInput * dot * speed * Time.fixedDeltaTime;
+
+
+		Rigidbody2D rigid = shrimp.GetComponent<Rigidbody2D>();
+
+		if(speedRelative) {
+			float speedDot = Mathf.Clamp01(Vector2.Dot(rigid.velocity, force));
+			force /= (rigid.velocity.magnitude*speedDot+0.1f);
+		} 
+
+		if(maxSpeedOn) {
+			float speedDot = Mathf.Clamp01(-Vector2.Dot(rigid.velocity, force));
+			float percentSpeed = rigid.velocity.magnitude / maxSpeed;
+			//force *= 
+		}
+
+
+
+		//hand.transform.position += (Vector3) axisInput*speed*Time.deltaTime;
+
+
+		rigid.AddForce(force);
+
+		Debug.Log(""+force+"     "+dot);
+		Debug.DrawRay(shrimp.transform.position, force, Color.cyan, 0.01f);
 	
 	}
 }
