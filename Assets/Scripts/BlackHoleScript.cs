@@ -7,6 +7,8 @@ public class BlackHoleScript : MonoBehaviour {
 	public float startSpeed;
 	public float lifeTime;
 
+	public float timeForTransform = 1.5f;
+
 	public PointEffector2D gravity;
 	public CircleCollider2D effectorArea;
 	public CircleCollider2D area;
@@ -15,6 +17,9 @@ public class BlackHoleScript : MonoBehaviour {
 	bool collided = false;
 
 	public float mass = 1;
+
+	float time = 0;
+
 	// Use this for initialization
 	void Start () 
 	{
@@ -39,9 +44,9 @@ public class BlackHoleScript : MonoBehaviour {
 				rigid.mass = mass;
 
 				//effectorArea.radius += other.effectorArea.radius;
-				lifeTime+=1000f;
+				lifeTime += 1000f;
 
-				transform.localScale = Vector3.one + Vector3.one * mass/10;
+				transform.localScale = Vector3.one + Vector3.one * mass/4;
 				Destroy(other.gameObject);
 			}
 			else {
@@ -51,7 +56,7 @@ public class BlackHoleScript : MonoBehaviour {
 				//other.effectorArea.radius += effectorArea.radius;
 				other.rigid.mass = other.mass;
 
-				other.transform.localScale = Vector3.one + Vector3.one * other.mass/10;
+				other.transform.localScale = Vector3.one + Vector3.one * other.mass/4;
 				Destroy(gameObject);
 			}
 
@@ -59,6 +64,15 @@ public class BlackHoleScript : MonoBehaviour {
 			//Destroy(_collider.collider.gameObject);
 
 
+		}
+		else if (_collider.collider.CompareTag("Shrimp")) {
+
+			if(time >= timeForTransform) return;
+
+			Damage damage = (Damage) _collider.collider.gameObject.GetComponent(typeof(Damage));
+			ControllerInput shrimp = damage.shrimp;
+			Debug.Log("STUN"+ _collider.collider.tag);
+			shrimp.Stun(2.5f);
 		}
 	}
 	void FixedUpdate() {
@@ -79,4 +93,14 @@ public class BlackHoleScript : MonoBehaviour {
 			lifeTime = lifeTime - 1*Time.deltaTime;
 		}
 	}
+	/*void OnTriggerEnter2D(Collider2D coll) {
+
+		if(time >= timeForTransform) return;
+		if(!coll.CompareTag("Shrimp")) return;
+
+		ControllerInput shrimp = (ControllerInput) coll.gameObject.GetComponent(typeof(ControllerInput));
+		Debug.Log("STUN"+ coll.tag);
+		shrimp.Stun(2.5f);
+
+	}*/
 }
