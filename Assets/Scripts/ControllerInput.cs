@@ -86,6 +86,7 @@ public class ControllerInput : MonoBehaviour {
 		if(stunned) return;
 		Steer ();
 		Aim ();
+		Debug.Log("Joysticknames" +Input.GetJoystickNames());
 
 	
 	}

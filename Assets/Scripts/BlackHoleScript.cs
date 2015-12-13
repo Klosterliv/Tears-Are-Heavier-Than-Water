@@ -17,6 +17,7 @@ public class BlackHoleScript : MonoBehaviour {
 	bool collided = false;
 
 	public float mass = 1;
+	public float stunTime;
 
 	float time = 0;
 
@@ -72,7 +73,7 @@ public class BlackHoleScript : MonoBehaviour {
 			Damage damage = (Damage) _collider.collider.gameObject.GetComponent(typeof(Damage));
 			ControllerInput shrimp = damage.shrimp;
 			Debug.Log("STUN"+ _collider.collider.tag);
-			shrimp.Stun(2.5f);
+			shrimp.Stun(stunTime);
 		}
 	}
 	void FixedUpdate() {
